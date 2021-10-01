@@ -1,0 +1,154 @@
+{
+    "palabras": [
+        {
+            "letra": "A",
+            "titulo": "Empieza por A:",
+            "pista": " Relato breve de un acontecimiento extraño, curioso o divertido, generalmente ocurrido a la persona que lo cuenta.",
+            "respuesta": "Anecdota"
+        },
+        {
+            "letra": "B",
+            "titulo": "Empieza por B:",
+            "pista": " Pasta dulce y esponjosa, hecha con harina, huevos, levadura y otros ingredientes, que puede tener distintas formas",
+            "respuesta": "Bollo"
+        },
+        {
+            "letra": "C",
+            "titulo": "Empieza por C:",
+            "pista": " Corriente de agua que cae desde cierta altura a causa de un brusco desnivel en su cauce, especialmente en un rio",
+            "respuesta": "Cascada"
+        },
+        {
+            "letra": "D",
+            "titulo": "Empieza por D:",
+            "pista": " Arma blanca de hoja corta, ancha y puntiaguda, parecida a la espada pero de menor tamaño",
+            "respuesta": "Daga"
+        },
+        {
+            "letra": "E",
+            "titulo": "Empieza por E:",
+            "pista": " Línea curva que describe varias vueltas alrededor de un punto, alejándose cada vez más de él",
+            "respuesta": "Espiral"
+        },
+        {
+            "letra": "F",
+            "titulo": "Contiene la F:",
+            "pista": " Que está descompuesto o podrido por la acción de diversos factores y determinados microorganismos",
+            "respuesta": "Putrefacto"
+        },
+        {
+            "letra": "G",
+            "titulo": "Empieza por G:",
+            "pista": " Que se comporta de manera ruda, tosca o grosera",
+            "respuesta": "Garrulo"
+        },
+        {
+            "letra": "H",
+            "titulo": "Contiene la H:",
+            "pista": " Persona o animal que es grueso y de poca altura",
+            "respuesta": "Rechoncho"
+        },
+        {
+            "letra": "I",
+            "titulo": "Empieza por I:",
+            "pista": " Que está en el espacio existente entre dos astros, o que tiene relación con él",
+            "respuesta": "Interestelar"
+        },
+        {
+            "letra": "J",
+            "titulo": "Empieza por J:",
+            "pista": " Chile picante de unos 5 cm de largo, carnoso y de punta redonda, que se usa para condimentar ciertos guisos",
+            "respuesta": "Jalapeño"
+        },
+        {
+            "letra": "L",
+            "titulo": "Contiene la L:",
+            "pista": " Hombre pequeño y débil",
+            "respuesta": "Homunculo"
+        },
+        {
+            "letra": "M",
+            "titulo": "Empieza por M:",
+            "pista": " Persona que sufre o muere por defender su religión o sus ideales. ",
+            "respuesta": "Martir"
+        },
+        {
+            "letra": "N",
+            "titulo": "Empieza por N:",
+            "pista": " Tubo fluorescente que produce una luz brillante.",
+            "respuesta": "Neon"
+        },
+        {
+            "letra": "Ñ",
+            "titulo": "Contiene la Ñ:",
+            "pista": " Dar a una cosa un color distinto del que tiene.",
+            "respuesta": "Teñir"
+        },
+        {
+            "letra": "O",
+            "titulo": "Empieza por O:",
+            "pista": " Que conoce todas las cosas reales y posibles.",
+            "respuesta": "Omnisciente"
+        },
+        {
+            "letra": "P",
+            "titulo": "Contiene la P:",
+            "pista": " Calzado de lona, con suela de esparto, cáñamo o goma, que se sujeta al pie por presión o con unas cintas que se atan al tobillo.",
+            "respuesta": "Alpargata"
+        },
+        {
+            "letra": "Q",
+            "titulo": "Empieza por Q:",
+            "pista": " Que se puede romper fácilmente.",
+            "respuesta": "Quebradizo"
+        },
+        {
+            "letra": "R",
+            "titulo": "Empieza por R:",
+            "pista": " Operación quirúrgica para restaurar la nariz.",
+            "respuesta": "Rinoplastia"
+        },
+        {
+            "letra": "S",
+            "titulo": "Contiene la S:",
+            "pista": " Falta de cuidado en la forma de vestir y en el aseo personal.",
+            "respuesta": "Desaliño"
+        },
+        {
+            "letra": "T",
+            "titulo": "Empieza por T:",
+            "pista": " Persona alocada, bulliciosa y molesta.",
+            "respuesta": "Tabardillo"
+        },
+        {
+            "letra": "U",
+            "titulo": "Contiene la U:",
+            "pista": " Persona que rehúye el trato de otras personas y rechaza las atenciones y muestras de cariño.",
+            "respuesta": "Huraño"
+        },
+        {
+            "letra": "V",
+            "titulo": "Empieza por V:",
+            "pista": " Tributo que el vasallo pagaba a su señor o servicio que le prestaba según este vínculo.",
+            "respuesta": "Vasallaje"
+        },
+        {
+            "letra": "X",
+            "titulo": "Contiene la X:",
+            "pista": " Punto culminante o de mayor satisfacción de la excitación sexual en las zonas erógenas o sexuales.",
+            "respuesta": "Climax"
+        },
+        {
+            "letra": "Y",
+            "titulo": "Contiene la Y:",
+            "pista": " Toro castrado, que se utiliza como animal de tiro y del cual se aprovecha su carne.",
+            "respuesta": "Buey"
+        },
+        {
+            "letra": "Z",
+            "titulo": "Contiene la Z:",
+            "pista": " Que es tonto o tiene poca rapidez mental.",
+            "respuesta": "Pazguato"
+        }
+    ]
+}
