@@ -4,10 +4,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-app.get('/', function (request, response) {
+app.get('/', function(request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
-app.listen(3000, () => console.log(`FUNCIONAMIENTO CORRECTO`));
+//app.listen(3000, () => console.log(`FUNCIONAMIENTO CORRECTO`));
 
 //----------------------------- SISTEMA 24/7 -----------------------------//
 
@@ -39,7 +39,7 @@ let ind = 0;
 let indPista = 0;
 
 // Cuando esté el cliente operativo realiza estas acciones
-client.on("ready", async function () {
+client.on("ready", async function() {
   initBot();
 });
 
@@ -87,11 +87,13 @@ client.on("message", (message) => {
 
 function initBot() {
   console.log(`INICIADO COMO BOT: ${client.user.tag}`);
-  sendAsyncMessage("***Pasapalabra***");
-  sendAsyncMessage("`!pista` para pedir una ayudita");
-  sendAsyncMessage("`!saltar` para pasar a la siguiente palabra");
-  sendAsyncMessage("`!resolver` para ver la palabra oculta");
-  sendAsyncMessage("`!reset` para reiniciar el juego");
+
+  sendAsyncMessage( "***Pasapalabra***" + "\n" +
+                    "`!pista` para pedir una ayudita" + "\n" +
+                    "`!saltar` para pasar a la siguiente palabra" + "\n" +
+                    "`!resolver` para ver la palabra oculta" + "\n" +
+                    "`!reset` para reiniciar el juego");
+
   ind = 0;
   indPista = 0;
 
@@ -100,14 +102,11 @@ function initBot() {
 }
 
 function nextWord(idx) {
-  //console.log("nextWord()");
   // Si se ha llegado al ultimo elemento
   if (idx >= wordList.palabras.length) {
     sendAsyncMessage("**Rosco completado!**");
   } else {
-    //sendAsyncMessage("*" + wordList.palabras[idx].titulo + "*");
-    //sendAsyncMessage(wordList.palabras[idx].pista);
-    sendAsyncMessage("```" + wordList.palabras[idx].titulo + "\n" + wordList.palabras[idx].pista + "```");
+    sendAsyncMessage( wordList.palabras[idx].titulo + "\n" + wordList.palabras[idx].pista );
   }
 }
 
@@ -120,39 +119,52 @@ async function sendAsyncMessage(msg) {
 
 function getHint(word, idxPista) {
   console.log("getHint()");
+  let blankEmojiText = '';
+
   // idx en el indice de pistas pedidas
-  if (idxPista === 1)
-    return "`" + word.length + " caracteres" + "`";
-  else if (idxPista === 2)
-    return "`" + word.replace(/(a|e|i|o|u|A|E|I|O|U)/g, '*') + "`"
-  else if (idxPista > 2)
-    return "`No hy más pistas`"
+  if (idxPista === 1) {
+    for (let i = 0; i < word.length; i++) {
+      if (i === 0) {
+        blankEmojiText = blankEmojiText + ':regional_indicator_' +  word.substring(0, 1).toLowerCase() + ': ';
+      } else {
+        blankEmojiText = blankEmojiText + ':blue_square: ';
+      }
+
+    }
+    return blankEmojiText;
+    //return "`" + word.length + " caracteres" + "`";
+  } else if (idxPista === 2) {
+    return getEmojiText(word.replace(/(a|e|i|o|u|A|E|I|O|U)/g, '*'));
+    //return "`" + word.replace(/(a|e|i|o|u|A|E|I|O|U)/g, '*') + "`";
+  } else if (idxPista > 2) {
+    return "`No hy más pistas`";
+  }
 }
 
-function getEmojiText(word2){
+function getEmojiText(word2) {
   console.log('incio getEmojiText(' + word2 + ')');
-  
+
   let emojiText = '';
   let character = '';
   let emojiCharacter
 
-   console.log('word2 :' + word2.length);
+  console.log('word2 :' + word2.length);
 
   for (let i = 0; i < word2.length; i++) {
-    character = word2.substring(i, i+1).toLowerCase();
+    character = word2.substring(i, i + 1).toLowerCase();
     console.log('character: ' + character);
 
-    if (character === 'ñ'){
+    if (character === 'ñ') {
       emojiCharacter = 'Ñ'
-    } else{
+    } else if (character === '*') {
+      emojiCharacter = ':blue_square:'
+    } else {
       emojiCharacter = ':regional_indicator_' + character + ':'
     }
 
-    emojiText = emojiText + emojiCharacter;
-    console.log('emojiText: ' + emojiText);
+    emojiText = emojiText + emojiCharacter + ' ';    
   }
-
-  sendAsyncMessage(emojiText);
+  return emojiText;
 }
 
 client.login(mySecretToken);
