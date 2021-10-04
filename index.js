@@ -4,8 +4,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-app.get('/', function(request, response) {
-	response.sendFile(__dirname + '/views/index.html');
+app.get('/', function (request, response) {
+  response.sendFile(__dirname + '/views/index.html');
 });
 app.listen(3000, () => console.log(`FUNCIONAMIENTO CORRECTO`));
 
@@ -40,15 +40,7 @@ let indPista = 0;
 
 // Cuando esté el cliente operativo realiza estas acciones
 client.on("ready", async function () {
-
-  console.log(`INICIADO COMO BOT: ${client.user.tag}`); 
-  sendAsyncMessage("***Pasapalabra***");
-  sendAsyncMessage("`!pista` para pedir una ayudita");
-  sendAsyncMessage("`!saltar` para pasar a la siguiente palabra");
-  sendAsyncMessage("`!resolver` para ver la palabra oculta");
-
-  //Iniciar el juego con indice 0
-  nextWord(ind);
+  initBot();
 });
 
 // client.on("messageCreate", (message) => { --> version local node v16
@@ -71,6 +63,8 @@ client.on("message", (message) => {
   } else if (message.content === "!resolver") {
     // Mostrar texto oculto
     message.channel.send("||" + wordList.palabras[ind].respuesta + "||");
+  } else if (message.content === "!reset") {
+    initBot();
   }
 
   if (ind < wordList.palabras.length) {
@@ -91,6 +85,19 @@ client.on("message", (message) => {
 
 });
 
+function initBot() {
+  console.log(`INICIADO COMO BOT: ${client.user.tag}`);
+  sendAsyncMessage("***Pasapalabra***");
+  sendAsyncMessage("`!pista` para pedir una ayudita");
+  sendAsyncMessage("`!saltar` para pasar a la siguiente palabra");
+  sendAsyncMessage("`!resolver` para ver la palabra oculta");
+  sendAsyncMessage("`!reset` para reiniciar el juego");
+  ind = 0;
+  indPista = 0;
+
+  //Iniciar el juego con indice 0
+  nextWord(ind);
+}
 
 function nextWord(idx) {
   //console.log("nextWord()");
@@ -104,6 +111,13 @@ function nextWord(idx) {
   }
 }
 
+async function sendAsyncMessage(msg) {
+  //console.log("pre- sendAsyncMessage()");
+  const channel = await client.channels.fetch(mySecretChatId);
+  await channel.send(msg);
+  //console.log("post- sendAsyncMessage()");
+}
+
 function getHint(word, idxPista) {
   console.log("getHint()");
   // idx en el indice de pistas pedidas
@@ -115,11 +129,30 @@ function getHint(word, idxPista) {
     return "`No hy más pistas`"
 }
 
-async function sendAsyncMessage(msg) {
-  //console.log("pre- sendAsyncMessage()");
-  const channel = await client.channels.fetch(mySecretChatId);
-  await channel.send(msg);
- //console.log("post- sendAsyncMessage()");
+function getEmojiText(word2){
+  console.log('incio getEmojiText(' + word2 + ')');
+  
+  let emojiText = '';
+  let character = '';
+  let emojiCharacter
+
+   console.log('word2 :' + word2.length);
+
+  for (let i = 0; i < word2.length; i++) {
+    character = word2.substring(i, i+1).toLowerCase();
+    console.log('character: ' + character);
+
+    if (character === 'ñ'){
+      emojiCharacter = 'Ñ'
+    } else{
+      emojiCharacter = ':regional_indicator_' + character + ':'
+    }
+
+    emojiText = emojiText + emojiCharacter;
+    console.log('emojiText: ' + emojiText);
+  }
+
+  sendAsyncMessage(emojiText);
 }
 
 client.login(mySecretToken);
