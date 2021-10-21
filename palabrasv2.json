@@ -1,0 +1,170 @@
+{
+  "palabras": [
+    {
+      "letra": "A",
+      "lista": [
+				  { "definicion": "Puesto o tienda donde se venden al por menor aceite, vinagre, legumbres secas, bacalao, etc.", "respuesta": "ABACERÍA" }
+				, { "definicion": "Bastidor con cuerdas o alambres paralelos y en cada uno de ellos bolas móviles, usado para operaciones elementales de aritmética", "respuesta": "ÁBACO" }
+				, { "definicion": "Nomograma, representación gráfica que permite realizar con rapidez cálculos numéricos aproximados", "respuesta": "ÁBACO" }
+				, { "definicion": "Superior de un monasterio", "respuesta": "ABAD" }
+				, { "definicion": "Bacalao", "respuesta": "ABADEJO" }
+				, { "definicion": "Nombre común a varios peces del mismo género que el bacalao", "respuesta": "ABADEJO" }
+				, { "definicion": "Pez del mar de las Antillas, de color oscuro y escamas pequeñas y rectangulares", "respuesta": "ABADEJO" }
+				, { "definicion": "Superiora en ciertas comunidades de religiosas", "respuesta": "ABADESA" }
+				, { "definicion": "Iglesia y monasterio con territorio propio regidos por un abad", "respuesta": "ABADÍA" }
+				, { "definicion": "Territorio, jurisdicción y bienes o rentas pertenecientes al abad", "respuesta": "ABADÍA" }
+				, { "definicion": "Cuesta, terreno en pendiente", "respuesta": "ABAJADERO" }
+				, { "definicion": "Lanzar, arrojar, impeler violentamente algo", "respuesta": "ABALANZAR" }
+				, { "definicion": "Limpiar el trigo, la cebada, etc., de granzones y paja gruesa con el abaleo", "respuesta": "ABALEAR" }
+				, { "definicion": "Objeto de adorno vistoso y generalmente de poco valor", "respuesta": "ABALORIO" }
+				, { "definicion": "Cuenta o pieza taladrada que se ensarta con otras o se cose sobre ciertas prendas como adorno", "respuesta": "ABALORIO" }
+				, { "definicion": "Persona que lleva una bandera en las procesiones u otros actos públicos", "respuesta": "ABANDERADO" }
+				, { "definicion": "Ponerse al frente de una causa, movimiento u organización para defenderlos o luchar por ellos", "respuesta": "ABANDERAR" }
+				, { "definicion": "Descuidado, desidioso", "respuesta": "ABANDONADO" }
+				, { "definicion": "Dejar solo algo o a alguien alejándose de ello o dejando de cuidarlo", "respuesta": "ABANDONAR" }
+				, { "definicion": "Dejar una actividad u ocupación o no seguir realizándola", "respuesta": "ABANDONAR" }
+				, { "definicion": "Dejar un lugar, apartarse de él", "respuesta": "ABANDONAR" }
+				, { "definicion": "En el juego o en el deporte, dejar de luchar, darse por vencido", "respuesta": "ABANDONAR" }
+				, { "definicion": "Dejarse dominar por afectos, pasiones o vicios", "respuesta": "ABANDONARSE" }
+				, { "definicion": "Tendencia a abandonar sin lucha algo que se posee o que podría poseerse por derecho", "respuesta": "ABANDONISMO" }
+				, { "definicion": "Hacer aire a alguien o a algo con el abanico u otra cosa", "respuesta": "ABANICAR/ABANICARSE" }
+				, { "definicion": "En el juego de béisbol, no darle a la pelota después de intentarlo con fuerza", "respuesta": "ABANICAR" }
+				, { "definicion": "Instrumento compuesto por un conjunto de varillas articuladas por un extremo y pegadas por el otro a una tela o un papel que se despliega con ellas en semicírculo", "respuesta": "ABANICO" }
+				, { "definicion": "Hacer algo barato o más barato o bajar su precio", "respuesta": "ABARATAR" }
+				, { "definicion": "Percibir o dominar con la vista, de una vez, algo en su totalidad", "respuesta": "ABARCAR" }
+				, { "definicion": "Abrazadera en forma de U que se utiliza para la sujeción de las ballestas de suspensión", "respuesta": "ABARCÓN" }
+				, { "definicion": "Dicho de la voz: Parecida a la del barítono", "respuesta": "ABARITONADO/ABARITONADA" }
+				, { "definicion": "Dicho de un instrumento: Que tiene un sonido de timbre semejante al de la voz del barítono", "respuesta": "ABARITONADO/ABARITONADA" }
+				, { "definicion": "Situar un buque con el costado muy próximo a un muelle o a otro buque", "respuesta": "ABARLOAR" }
+				, { "definicion": "Atropellar, pasar precipitadamente por encima de alguien", "respuesta": "ABARRAJAR/ARROLLAR" }
+				, { "definicion": "Llenar por completo un espacio de personas o cosas", "respuesta": "ABARROTAR" }
+				, { "definicion": "Hacer que un local se llene", "respuesta": "ABARROTAR" }
+				, { "definicion": "Dicho de un lugar: Llenarse con personas u objetos", "respuesta": "ABARROTARSE" }
+				, { "definicion": "Tienda donde se venden artículos de uso cotidiano, principalmente comestibles", "respuesta": "ABARROTE/ABASTECEDOR*" }
+				, { "definicion": "Tienda de comestibles y otros enseres de uso doméstico", "respuesta": "ABASTECEDOR" }
+				, { "definicion": "Proveer a alguien o a algo de bastimentos, víveres u otras cosas necesarias", "respuesta": "ABASTECER/ABASTECERSE" }
+				, { "definicion": "Dicho de un objeto: Que puede pasar de la posición vertical a la horizontal, o viceversa, haciéndolo girar en torno a un eje o bisagra", "respuesta": "ABATIBLE" }
+				, { "definicion": "Derribar algo, derrocarlo, echarlo por tierra", "respuesta": "ABATIR/ABATIRSE" }
+				, { "definicion": "Inclinar, tumbar, poner tendido lo que estaba vertical", "respuesta": "ABATIR" }
+				, { "definicion": "Hacer caer sin vida a una persona o animal", "respuesta": "ABATIR" }
+				, { "definicion": "Dicho de un ave, de un avión, etc.: Descender, precipitarse a tierra o sobre una presa", "respuesta": "ABATIRSE" }
+				, { "definicion": "Agotado por el calor excesivo o por un trabajo duro", "respuesta": "ABAYADO" }
+				, { "definicion": "Dicho de un monarca: Ceder la soberanía de su reino o su corona a otro, o renunciar a ella", "respuesta": "ABDICAR" }
+				, { "definicion": "Renunciar a algo propio, especialmente a una idea o una creencia", "respuesta": "ABDICAR" }
+				, { "definicion": "Región del tronco de los animales vertebrados que contiene los órganos principales del aparato digestivo y del genitourinario, y que en los mamíferos queda limitada superiormente por el diafragma", "respuesta": "ABDOMEN" }
+				, { "definicion": "Vientre, región exterior del cuerpo que es anterior en el ser humano e inferior en los demás vertebrados", "respuesta": "ABDOMEN" }
+				, { "definicion": "En muchos animales invertebrados, región que sigue al tórax; p. ej., en los insectos", "respuesta": "ABDOMEN" }
+				, { "definicion": "Senda o lugar por donde se abrevia el camino", "respuesta": "ATAJO" }
+				, { "definicion": "Dar de beber, principalmente al ganado", "respuesta": "ABREVAR" }
+				, { "definicion": "Torre hecha comúnmente en lugar alto, para registrar desde ella el campo o el mar y dar aviso de lo que se descubre", "respuesta": "ATALAYA" }
+				, { "definicion": "Despreciable, vil en extremo", "respuesta": "ABYECTO" }
+				, { "definicion": "Dicho de una costa: Cortada verticalmente o a plomo", "respuesta": "ACANTILADO" }
+				, { "definicion": "Nariz que es delgada y algo corva, a semejanza del pico del águila", "respuesta": "AGUILEÑA" }
+				, { "definicion": "Recinto fortificado situado en la parte más alta de las antiguas ciudades griegas donde se emplazaban templos y edificios públicos", "respuesta": "ACRÓPOLIS" }
+				, { "definicion": "Árbol leguminoso de las Antillas, de unos 20 m de altura, con hojas alternas y ovaladas, que sirven para el mantenimiento de los ganados, y cuya madera, fuerte y muy compacta, se usa en carpintería", "respuesta": "ABEY" }
+				, { "definicion": "Especialista en la ciencia que estudia las civilizaciones antiguas a través de los restos que se conservan de ellas", "respuesta": "ARQUEÓLOGO/ARQUEÓLOGA" }
+				, { "definicion": "Establecimiento donde se construyen y reparan buques", "respuesta": "ASTILLERO/ARSENAL/ATARAZANA" }
+				, { "definicion": "Asaltar a alguien con armas para robarle", "respuesta": "ATRACAR" }
+				, { "definicion": "Dicho de un ave nadadora: De pies palmeados, cuello largo y pico filtrador, que se clasificaba antes como palmípeda", "respuesta": "ANSERIFORME" }
+				, { "definicion": "Afiliado en alguna secta o asociación, especialmente si es clandestina", "respuesta": "ADEPTO" }
+				, { "definicion": "Razonamiento para probar o demostrar una proposición, o para convencer de lo que se afirma o se niega", "respuesta": "ARGUMENTO" }
+      ]
+    },
+    {
+      "letra": "B",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "C",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "D",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "E",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "F",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "G",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "H",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "I",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "J",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "L",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "M",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "N",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "Ñ",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "O",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "P",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "Q",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "R",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "S",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "T",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "U",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "V",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "X",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "Y",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    },
+    {
+      "letra": "Z",
+      "lista": [{ "definicion": "Barca (test)", "respuesta": "BARCA" }]
+    }
+  ]
+}
