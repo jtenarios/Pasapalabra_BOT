@@ -1,12 +1,33 @@
+// librerias a instalar desde la consola
+// npm install jsdom
+// npm install jquery
+
+//----------------------------- Notas ------------------------------------//
+// Ignoramos mayusculas y minúsculas
+// Ignoramos acentos y dieresis
+// Cuando hay más de una respuesta vienen separadas por el caracter "/"
+
+//----------------------------- TODO Liist--------------------------------//
+//No muestra la lista de las palabras con Ñ
+//Palabras con más de una posible respuesta ej. ABASTECER/ABASTECERSE
+//El bot se reinicia cada x horas
+
 //----------------------------- SISTEMA 24/7 -----------------------------//
 const keepAlive = require("./server");
 
+//----------------------------- Usar librerias jQuery --------------------//
+var jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
+
+var $ = jQuery = require('jquery')(window);
+
 //---------------------------- CODIGO DEL BOT ----------------------------//
 
-console.log("PRE - Declaraciones");
-
 // Lista de palabras
-const wordList = require("./palabrasv2.json");
+const wordList = require("./palabras.json");
 // Token del bot
 const mySecretToken = process.env["TOKEN"];
 // ID del canal, "@replit/database"
@@ -18,16 +39,12 @@ const { Client, Intents } = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 // Iniciar primmer elemento del array
-let ind = 0;
+let letterInd = "A";
 let indPista = 0;
+
+let jsonList;
 let sizeList = 0;
 let idxRandom = 0;
-//let lastWord;
-
-//console.log("lastWord: " + lastWord);
-//console.log(wordList.palabras[0]);
-
-console.log("POST - Declaraciones");
 
 // Cuando esté el cliente operativo realiza estas acciones
 client.on("ready", async function() {
@@ -40,94 +57,76 @@ client.on("message", (message) => {
   //lastWord = getLastWord();
   //console.log('lastWord', lastWord);
 
-
   if (message.content === "!pista") {
     indPista = indPista + 1;
-    message.channel.send(getHint(wordList.palabras[ind], indPista));
-  } else if (message.content === "!saltar") {
-    ind = ind + 1;
+    message.channel.send(getHint(jsonList[idxRandom].respuesta, indPista));
+  } else if (message.content === "!skip") {
+    //ind = ind + 1;
+    letterInd = nextLetterInAlphabet(letterInd);
     nextWord(ind);
     indPista = 0;
-  } else if (message.content === "!resolver") {
+  } else if (message.content === "!resolve") {
     // Mostrar texto oculto
-    message.channel.send("||" + wordList.palabras[ind].respuesta + "||");
+    message.channel.send("||" + jsonList[idxRandom].respuesta + "||");
   } else if (message.content === "!reset") {
     initBot();
   } else if (message.content === "!status") {
-    message.channel.send("Estoy vivo!!");
+    message.channel.send("Running...");
   }
 
-  //if (ind < wordList.palabras.length) {
-    if (message.content.toLowerCase() === wordList.palabras[ind].lista[idxRandom].respuesta.toLowerCase()) {
+  if (message.content.toLowerCase() === jsonList[idxRandom].respuesta.toLowerCase()) {
 
-      // Reaccionar al último mensaje del chat con un thumbs up (👍)
-      message.react("👍");
-      ind = ind + 1;
-      nextWord(ind);
-      indPista = 0;
-    }
-  //}
+    // Reaccionar al último mensaje del chat con un thumbs up (👍)
+    message.react("👍");
+    letterInd = nextLetterInAlphabet(letterInd);
+    nextWord(letterInd);
+    indPista = 0;
+  }
 
 });
 
 function initBot() {
   console.log(`INICIADO COMO BOT: ${client.user.tag}`);
-  console.log("PRE - initBot");
 
   sendAsyncMessage("***Pasapalabra***" + "\n" +
+    "Lista de comandos:" + "\n" +
     "`!pista` para pedir una ayudita" + "\n" +
-    "`!saltar` para pasar a la siguiente palabra" + "\n" +
-    "`!resolver` para ver la palabra oculta" + "\n" +
+    "`!skip` para pasar a la siguiente palabra" + "\n" +
+    "`!resolve` para ver la palabra oculta" + "\n" +
     "`!reset` para reiniciar el juego" + "\n" +
-    "`!status` para ver estado del bot"    
-    );
+    "`!status` para ver estado del bot"
+  );
 
-  ind = 0;
-  indPista = 0;
-
-  //Iniciar el juego con indice 0
-  nextWord(ind);
-
-  console.log("POST - initBot");
+  //Iniciar el juego con letra A
+  nextWord(letterInd);
 }
 
-function nextWord(idx) {
+function nextWord(letter) {
 
-//console.log(wordList.palabras[0].lista[0].definicion);
-//console.log(wordList.palabras[0].lista[0].respuesta);
-//console.log("nº de palabras disponibles", wordList.palabras[0].lista.length);
-//console.log("random", getRandomInt(wordList.palabras[0].lista.length));
-
-  sizeList = wordList.palabras[idx].lista.length +1;
+  // Filter only by letter (A-Z)
+  jsonList = $(wordList).filter(
+    function(i, n) {
+      return n.letra === letter
+    }
+  );
+  sizeList = jsonList.length;
   idxRandom = getRandomInt(sizeList);
 
-  /* let currentWord = wordList.palabras[idx].respuesta.toLowerCase().trim();
+  //console.log("nextWord --> sizeList", sizeList);
+  //console.log("nextWord --> idxRandom", idxRandom);
+  //console.log("nextWord --> lista[" + letter + "]:", jsonList);
 
-  console.log("currentWord: " + currentWord);
-  console.log("lastWord: " + lastWord); */
-
-  // Si se ha llegado al ultimo elemento
-//  if (idx >= wordList.palabras.length) {
-//    sendAsyncMessage("**Rosco completado!**");
-//  } //else if (currentWord == lastWord){
-    //console.log("activando Bot con la misma palabra");
-  //} 
-//  else {
-    console.log("nextWord()");
-    console.log("idx:", idx);
-    console.log("idxRandom", idxRandom);
-    sendAsyncMessage("Empieza por " + wordList.palabras[idx].letra + ": \n" + wordList.palabras[idx].lista[idxRandom].definicion);
-//  }
+  sendAsyncMessage("Empieza por " + jsonList[idxRandom].letra + ": \n" + jsonList[idxRandom].definicion);
 }
 
 async function sendAsyncMessage(msg) {
-  console.log("pre- sendAsyncMessage()");
+  //console.log("pre- sendAsyncMessage()");
   const channel = await client.channels.fetch(mySecretChatId);
   await channel.send(msg);
-  console.log("post- sendAsyncMessage()");
+  //console.log("post- sendAsyncMessage()");
 }
 
-function getEmojiText(word2) {
+/* function getEmojiText(word2) {
   console.log("incio getEmojiText(" + word2 + ")");
 
   let emojiText = "";
@@ -148,19 +147,19 @@ function getEmojiText(word2) {
       emojiCharacter = ":regional_indicator_" + character + ":"
     }
 
-    emojiText = emojiText + emojiCharacter + " ";    
+    emojiText = emojiText + emojiCharacter + " ";
   }
   return emojiText;
-}
+} */
 
-function getHint(wordJson, idxPista) {
-  console.log("getHint()");
+function getHint(word, idxPista) {
+  console.log("getHint()", word, idxPista);
 
   // idx en el indice de pistas pedidas
   if (idxPista === 1) {
-    return getEmojiText(wordJson.respuesta.replace(/[a-z]/g, "*"));
+    return "`" + word.toLowerCase().replace(/[a-z]/g, "*") + "`";
   } else if (idxPista === 2) {
-    return getEmojiText(wordJson.respuesta.replace(/[aeiou]/g, "*"));
+    return "`" + word.toLowerCase().replace(/[aeiouáéíóúäëïöü]/g, "*") + "`";
 
   } else if (idxPista > 2) {
     return "`No hy más pistas`";
@@ -171,30 +170,17 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-/* function getLastWord(){
-  var fs = require('fs');
-
-  fs.readFile('ultimaPalabra.txt', 'utf8', function(err, data) {
-    if (err) {
-      return console.log(err);
-    }
-    lastWord = data;
-    console.log("getLastWord(): " + data);
-    return data;
-  });
+// This will return A for Z
+function nextLetterInAlphabet(letter) {
+  // If letter is Z, start again with A
+  if (letter == "Z") {
+    sendAsyncMessage("***Rosco completado, enhorabuena***" + "\n" + "empezamos de nuevo, ¡ánimo!")
+    return "A";
+  } else {
+    console.log(String.fromCharCode(letter.charCodeAt(0) + 1));
+    return String.fromCharCode(letter.charCodeAt(0) + 1);
+  }
 }
-
-function setLastWord(){
-  var fs = require('fs');
-
-  fs.writeFile("ultimaPalabra.txt", "jaimeMola", function(err) {
-    if (err) {
-      return console.log(err);
-    }
-
-    console.log("El archivo fue creado correctamente");
-  });
-} */
 
 // Mantener el Bot activo
 keepAlive();
