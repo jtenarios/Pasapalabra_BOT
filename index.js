@@ -7,10 +7,10 @@
 // Ignoramos acentos y dieresis
 // Cuando hay más de una respuesta vienen separadas por el caracter "/"
 
-//----------------------------- TODO Liist--------------------------------//
-//No muestra la lista de las palabras con Ñ
-//Palabras con más de una posible respuesta ej. ABASTECER/ABASTECERSE
-//El bot se reinicia cada x horas
+//----------------------------- TODO List--------------------------------//
+// 1. El bot se reinicia cada x horas, guardar ultima letra-palabra propuesta
+//    para volver a mostrar la misma tras el reinicio
+// 2. Crear comando 'goTo(letter)' por si es necesario saltar a alguna letra concreta
 
 //----------------------------- SISTEMA 24/7 -----------------------------//
 const keepAlive = require("./server");
@@ -33,7 +33,7 @@ const mySecretToken = process.env["TOKEN"];
 // ID del canal, "@replit/database"
 const mySecretChatId = process.env["PASAPALABRA_CHAT_ID"];
 
-// Creo que es para importar las librerias de discord
+// Importar las librerias de discord ?
 const { Client, Intents } = require("discord.js");
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
@@ -57,13 +57,21 @@ client.on("message", (message) => {
   //lastWord = getLastWord();
   //console.log('lastWord', lastWord);
 
+  // Convertir en lista las respuestas separadas por / y revisar cada una
+  let resultList = new Array();
+  resultList = jsonList[idxRandom].respuesta.split("/");
+  console.log("resultList", resultList);
+
   if (message.content === "!pista") {
     indPista = indPista + 1;
-    message.channel.send(getHint(jsonList[idxRandom].respuesta, indPista));
+
+    for (let i = 0; i < resultList.length; i++) {
+      message.channel.send(getHint(resultList[i], indPista));
+    }
   } else if (message.content === "!skip") {
     //ind = ind + 1;
     letterInd = nextLetterInAlphabet(letterInd);
-    nextWord(ind);
+    nextWord(letterInd);
     indPista = 0;
   } else if (message.content === "!resolve") {
     // Mostrar texto oculto
@@ -74,13 +82,15 @@ client.on("message", (message) => {
     message.channel.send("Running...");
   }
 
-  if (message.content.toLowerCase() === jsonList[idxRandom].respuesta.toLowerCase()) {
+  for (let i = 0; i < resultList.length; i++) {
+    if (message.content.toLowerCase() === resultList[i].toLowerCase()) {
 
-    // Reaccionar al último mensaje del chat con un thumbs up (👍)
-    message.react("👍");
-    letterInd = nextLetterInAlphabet(letterInd);
-    nextWord(letterInd);
-    indPista = 0;
+      // Reaccionar al último mensaje del chat con un thumbs up (👍)
+      message.react("👍");
+      letterInd = nextLetterInAlphabet(letterInd);
+      nextWord(letterInd);
+      indPista = 0;
+    }
   }
 
 });
@@ -98,6 +108,7 @@ function initBot() {
   );
 
   //Iniciar el juego con letra A
+  letterInd = "A";
   nextWord(letterInd);
 }
 
@@ -116,7 +127,8 @@ function nextWord(letter) {
   //console.log("nextWord --> idxRandom", idxRandom);
   //console.log("nextWord --> lista[" + letter + "]:", jsonList);
 
-  sendAsyncMessage("Empieza por " + jsonList[idxRandom].letra + ": \n" + jsonList[idxRandom].definicion);
+  // "Empieza por/Contien la" + letra"
+  sendAsyncMessage(jsonList[idxRandom].titulo + " **" + jsonList[idxRandom].letra + "**: \n" + jsonList[idxRandom].definicion);
 }
 
 async function sendAsyncMessage(msg) {
@@ -157,12 +169,12 @@ function getHint(word, idxPista) {
 
   // idx en el indice de pistas pedidas
   if (idxPista === 1) {
-    return "`" + word.toLowerCase().replace(/[a-z]/g, "*") + "`";
+    return "`" + word.toLowerCase().replace(/./g, "*") + "`";
   } else if (idxPista === 2) {
     return "`" + word.toLowerCase().replace(/[aeiouáéíóúäëïöü]/g, "*") + "`";
 
   } else if (idxPista > 2) {
-    return "`No hy más pistas`";
+    return "`No hay más pistas`";
   }
 }
 
@@ -172,14 +184,23 @@ function getRandomInt(max) {
 
 // This will return A for Z
 function nextLetterInAlphabet(letter) {
+  let nextLetter;
+
   // If letter is Z, start again with A
   if (letter == "Z") {
     sendAsyncMessage("***Rosco completado, enhorabuena***" + "\n" + "empezamos de nuevo, ¡ánimo!")
-    return "A";
+    nextLetter = "A"
   } else {
-    console.log(String.fromCharCode(letter.charCodeAt(0) + 1));
-    return String.fromCharCode(letter.charCodeAt(0) + 1);
+
+    nextLetter = String.fromCharCode(letter.charCodeAt(0) + 1);
+
+    // Letras no contempladas en el rosco, saltar a la siguiente letra
+    if (nextLetter == "Ñ" || nextLetter == "K" || nextLetter == "T" || nextLetter == "W" || nextLetter == "Y") {
+      nextLetter = String.fromCharCode(nextLetter.charCodeAt(0) + 1);
+    }
   }
+
+  return nextLetter;
 }
 
 // Mantener el Bot activo
