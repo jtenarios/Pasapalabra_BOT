@@ -4,13 +4,11 @@
 
 //----------------------------- Notas ------------------------------------//
 // Ignoramos mayusculas y minúsculas
-// Ignoramos acentos y dieresis
+// Acentos y dieresis sí se tienen en cuenta
 // Cuando hay más de una respuesta vienen separadas por el caracter "/"
 
 //----------------------------- TODO List--------------------------------//
-// 1. El bot se reinicia cada x horas, guardar ultima letra-palabra propuesta
-//    para volver a mostrar la misma tras el reinicio
-// 2. Crear comando 'goTo(letter)' por si es necesario saltar a alguna letra concreta
+// 1. Crear comando 'goTo(letter)' por si es necesario saltar a alguna letra concreta
 
 //----------------------------- SISTEMA 24/7 -----------------------------//
 const keepAlive = require("./server");
@@ -42,43 +40,46 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_
 let letterInd = "A";
 let indPista = 0;
 
-let jsonList;
 let sizeList = 0;
 let idxRandom = 0;
 
+let jsonWord;
+
 // Cuando esté el cliente operativo realiza estas acciones
-client.on("ready", async function() {
+client.on("ready", async function () {
   initBot();
 });
 
 client.on("message", (message) => {
 
-  //console.log("event messageCreate()");
-  //lastWord = getLastWord();
-  //console.log('lastWord', lastWord);
-
   // Convertir en lista las respuestas separadas por / y revisar cada una
   let resultList = new Array();
-  resultList = jsonList[idxRandom].respuesta.split("/");
+  resultList = jsonWord.respuesta.split("/");
   console.log("resultList", resultList);
 
-  if (message.content === "!pista") {
+  if (message.content === ".help") {
+    sendAsyncMessage("***Pasapalabra***" + "\n" +
+      "Lista de comandos:" + "\n" +
+      "`.pista` para pedir una ayudita" + "\n" +
+      "`.next` para pasar a la siguiente palabra" + "\n" +
+      "`.resolve` para ver la palabra oculta" + "\n" +
+      "`.reset` para reiniciar el juego" + "\n" +
+      "`.status` para ver estado del bot (activo/inactivo)"
+    );
+  } else if (message.content === ".pista") {
     indPista = indPista + 1;
 
     for (let i = 0; i < resultList.length; i++) {
       message.channel.send(getHint(resultList[i], indPista));
     }
-  } else if (message.content === "!skip") {
-    //ind = ind + 1;
-    letterInd = nextLetterInAlphabet(letterInd);
-    nextWord(letterInd);
-    indPista = 0;
-  } else if (message.content === "!resolve") {
+  } else if (message.content === ".next") {
+    nextWord();
+  } else if (message.content === ".resolve") {
     // Mostrar texto oculto
-    message.channel.send("||" + jsonList[idxRandom].respuesta + "||");
-  } else if (message.content === "!reset") {
-    initBot();
-  } else if (message.content === "!status") {
+    message.channel.send("||" + jsonWord.respuesta + "||");
+  } else if (message.content === ".reset") {
+    resetBot();
+  } else if (message.content === ".status") {
     message.channel.send("Running...");
   }
 
@@ -86,10 +87,8 @@ client.on("message", (message) => {
     if (message.content.toLowerCase() === resultList[i].toLowerCase()) {
 
       // Reaccionar al último mensaje del chat con un thumbs up (👍)
-      message.react("👍");
-      letterInd = nextLetterInAlphabet(letterInd);
-      nextWord(letterInd);
-      indPista = 0;
+      message.react("👍");      
+      nextWord();      
     }
   }
 
@@ -98,37 +97,45 @@ client.on("message", (message) => {
 function initBot() {
   console.log(`INICIADO COMO BOT: ${client.user.tag}`);
 
-  sendAsyncMessage("***Pasapalabra***" + "\n" +
-    "Lista de comandos:" + "\n" +
-    "`!pista` para pedir una ayudita" + "\n" +
-    "`!skip` para pasar a la siguiente palabra" + "\n" +
-    "`!resolve` para ver la palabra oculta" + "\n" +
-    "`!reset` para reiniciar el juego" + "\n" +
-    "`!status` para ver estado del bot"
-  );
-
-  //Iniciar el juego con letra A
-  letterInd = "A";
-  nextWord(letterInd);
+  //Iniciar el juego con la ultima palabra mostrada guardada en el fichero "palabraActual.json"
+  openCurrentWord();
 }
 
-function nextWord(letter) {
+function resetBot() {
+  console.log("resetBot()")
+
+  //Iniciar el juego con la letra "A", para ello simulo que vamos por la última letra
+  letterInd = "Z"
+  nextWord();
+}
+
+function nextWord() {
+
+  let jsonList;
+
+  // Reset counter
+  indPista = 0;
+
+  nextLetterInAlphabet(letterInd);
 
   // Filter only by letter (A-Z)
   jsonList = $(wordList).filter(
-    function(i, n) {
-      return n.letra === letter
+    function (i, n) {
+      return n.letra === letterInd
     }
   );
   sizeList = jsonList.length;
   idxRandom = getRandomInt(sizeList);
 
-  //console.log("nextWord --> sizeList", sizeList);
-  //console.log("nextWord --> idxRandom", idxRandom);
-  //console.log("nextWord --> lista[" + letter + "]:", jsonList);
+  // Guardar palabra actual
+  saveCurrentWord(jsonList[idxRandom]);
 
   // "Empieza por/Contien la" + letra"
-  sendAsyncMessage(jsonList[idxRandom].titulo + " **" + jsonList[idxRandom].letra + "**: \n" + jsonList[idxRandom].definicion);
+  //sendAsyncMessage(jsonList[idxRandom].titulo + " **" + jsonList[idxRandom].letra + "**: \n" + jsonList[idxRandom].definicion);
+  //sendAsyncMessage(jsonWord.titulo + " **" + jsonWord.letra + "**: \n" + jsonWord.definicion);  
+
+  // Leer palabra actual
+  openCurrentWord();
 }
 
 async function sendAsyncMessage(msg) {
@@ -137,32 +144,6 @@ async function sendAsyncMessage(msg) {
   await channel.send(msg);
   //console.log("post- sendAsyncMessage()");
 }
-
-/* function getEmojiText(word2) {
-  console.log("incio getEmojiText(" + word2 + ")");
-
-  let emojiText = "";
-  let character = "";
-  let emojiCharacter
-
-  console.log("word2 :" + word2.length);
-
-  for (let i = 0; i < word2.length; i++) {
-    character = word2.substring(i, i + 1).toLowerCase();
-    console.log("character: " + character);
-
-    if (character === "ñ") {
-      emojiCharacter = "Ñ"
-    } else if (character === "*") {
-      emojiCharacter = ":blue_square:"
-    } else {
-      emojiCharacter = ":regional_indicator_" + character + ":"
-    }
-
-    emojiText = emojiText + emojiCharacter + " ";
-  }
-  return emojiText;
-} */
 
 function getHint(word, idxPista) {
   console.log("getHint()", word, idxPista);
@@ -188,7 +169,7 @@ function nextLetterInAlphabet(letter) {
 
   // If letter is Z, start again with A
   if (letter == "Z") {
-    sendAsyncMessage("***Rosco completado, enhorabuena***" + "\n" + "empezamos de nuevo, ¡ánimo!")
+    sendAsyncMessage("***Empezamos de nuevo, ¡ánimo!***");
     nextLetter = "A"
   } else {
 
@@ -200,7 +181,50 @@ function nextLetterInAlphabet(letter) {
     }
   }
 
-  return nextLetter;
+  letterInd = nextLetter;
+}
+
+function saveCurrentWord(str) {
+
+  var fsLibrary = require('fs')
+
+  console.log("saveCurrentWord()", str);
+
+  // Guardo la ultima palabra
+  let data = JSON.stringify(str);
+
+  // Write data in 'palabraActual.json' .
+  fsLibrary.writeFile('./palabraActual.json', data, (error) => {
+
+    // In case of a error throw err exception.
+    if (error) throw err;
+  })
+}
+
+function openCurrentWord() {
+  //console.log("openCurrentWord() - Init")
+
+  // Include fs module
+  var fs = require('fs');
+
+  // Use fs.readFile() method to read the file
+  fs.readFile('./palabraActual.json', (err, data) => {
+    jsonWord = JSON.parse(data);
+    letterInd = jsonWord.letra;
+    
+      // "Empieza por/Contien la" + letra"
+    sendAsyncMessage(jsonWord.titulo + " **" + jsonWord.letra + "**: \n" + jsonWord.definicion);
+
+    // En caso de no haber palabra guardada, resetear bot
+    if (err) {
+      console.log("openCurrentWord(), err", err)
+      resetBot();
+    }
+
+  })
+
+  
+  //
 }
 
 // Mantener el Bot activo
