@@ -9,6 +9,7 @@
 
 //----------------------------- TODO List--------------------------------//
 // 1. Crear comando 'goTo(letter)' por si es necesario saltar a alguna letra concreta
+// 2. Tratamiento de excepciones, hacer que el juego si falla registre un log pero no se pare
 
 //----------------------------- SISTEMA 24/7 -----------------------------//
 const keepAlive = require("./server");
@@ -23,6 +24,17 @@ global.document = document;
 var $ = jQuery = require('jquery')(window);
 
 //---------------------------- CODIGO DEL BOT ----------------------------//
+
+//
+const ANSI_RESET = "\u001B[0m";
+const ANSI_BLACK = "\u001B[30m";
+const ANSI_RED = "\u001B[31m";
+const ANSI_GREEN = "\u001B[32m";
+const ANSI_YELLOW = "\u001B[33m";
+const ANSI_BLUE = "\u001B[34m";
+const ANSI_PURPLE = "\u001B[35m";
+const ANSI_CYAN = "\u001B[36m";
+const ANSI_WHITE = "\u001B[37m";
 
 // Lista de palabras
 const wordList = require("./palabras.json");
@@ -46,53 +58,59 @@ let idxRandom = 0;
 let jsonWord;
 
 // Cuando esté el cliente operativo realiza estas acciones
-client.on("ready", async function () {
+client.on("ready", async function() {
   initBot();
 });
 
 client.on("message", (message) => {
 
-  // Convertir en lista las respuestas separadas por / y revisar cada una
-  let resultList = new Array();
-  resultList = jsonWord.respuesta.split("/");
-  console.log("resultList", resultList);
+  try {
 
-  if (message.content === ".help") {
-    sendAsyncMessage("***Pasapalabra***" + "\n" +
-      "Lista de comandos:" + "\n" +
-      "`.pista` para pedir una ayudita" + "\n" +
-      "`.next` para pasar a la siguiente palabra" + "\n" +
-      "`.resolve` para ver la palabra oculta" + "\n" +
-      "`.reset` para reiniciar el juego" + "\n" +
-      "`.status` para ver estado del bot (activo/inactivo)"
-    );
-  } else if (message.content === ".pista") {
-    indPista = indPista + 1;
+    // Convertir en lista las respuestas separadas por / y revisar cada una
+    let resultList = new Array();
+    resultList = jsonWord.respuesta.split("/");
+    //console.log("resultList", resultList);
+
+    if (message.content === ".help") {
+      sendAsyncMessage("***Pasapalabra***" + "\n" +
+        "Lista de comandos:" + "\n" +
+        "`.pista` para pedir una ayudita" + "\n" +
+        "`.next` para pasar a la siguiente palabra" + "\n" +
+        "`.resolve` para ver la palabra oculta" + "\n" +
+        "`.reset` para reiniciar el juego" + "\n" +
+        "`.status` para ver estado del bot (activo/inactivo)"
+      );
+    } else if (message.content === ".pista") {
+      indPista = indPista + 1;
+
+      for (let i = 0; i < resultList.length; i++) {
+        message.channel.send(getHint(resultList[i], indPista));
+      }
+    } else if (message.content === ".next") {
+      nextWord();
+    } else if (message.content === ".resolve") {
+      // Mostrar texto oculto
+      message.channel.send("||" + jsonWord.respuesta + "||");
+    } else if (message.content === ".reset") {
+      resetBot();
+    } else if (message.content === ".status") {
+      message.channel.send("Running...");
+    }
 
     for (let i = 0; i < resultList.length; i++) {
-      message.channel.send(getHint(resultList[i], indPista));
+      if (message.content.toLowerCase() === resultList[i].toLowerCase()) {
+
+        // Reaccionar al último mensaje del chat con un thumbs up (👍)
+        message.react("👍");
+        nextWord();
+      }
     }
-  } else if (message.content === ".next") {
-    nextWord();
-  } else if (message.content === ".resolve") {
-    // Mostrar texto oculto
-    message.channel.send("||" + jsonWord.respuesta + "||");
-  } else if (message.content === ".reset") {
-    resetBot();
-  } else if (message.content === ".status") {
-    message.channel.send("Running...");
+  } catch (err) {
+    message.channel.send("An error ocurred");
+    console.log(ANSI_RED + 'Exception :' + err + ANSI_RED);
   }
-
-  for (let i = 0; i < resultList.length; i++) {
-    if (message.content.toLowerCase() === resultList[i].toLowerCase()) {
-
-      // Reaccionar al último mensaje del chat con un thumbs up (👍)
-      message.react("👍");      
-      nextWord();      
-    }
-  }
-
-});
+}
+);
 
 function initBot() {
   console.log(`INICIADO COMO BOT: ${client.user.tag}`);
@@ -110,7 +128,7 @@ function resetBot() {
 }
 
 function nextWord() {
-
+  console.log("nextWord()")
   let jsonList;
 
   // Reset counter
@@ -120,7 +138,7 @@ function nextWord() {
 
   // Filter only by letter (A-Z)
   jsonList = $(wordList).filter(
-    function (i, n) {
+    function(i, n) {
       return n.letra === letterInd
     }
   );
@@ -150,7 +168,8 @@ function getHint(word, idxPista) {
 
   // idx en el indice de pistas pedidas
   if (idxPista === 1) {
-    return "`" + word.toLowerCase().replace(/./g, "*") + "`";
+    // Reemplaza cualquier caracter excepto espacios (\S	non-whitespace)
+    return "`" + word.toLowerCase().replace(/\S/g, "*") + "`";
   } else if (idxPista === 2) {
     return "`" + word.toLowerCase().replace(/[aeiouáéíóúäëïöü]/g, "*") + "`";
 
@@ -202,7 +221,7 @@ function saveCurrentWord(str) {
 }
 
 function openCurrentWord() {
-  //console.log("openCurrentWord() - Init")
+  console.log("openCurrentWord()")
 
   // Include fs module
   var fs = require('fs');
@@ -211,8 +230,8 @@ function openCurrentWord() {
   fs.readFile('./palabraActual.json', (err, data) => {
     jsonWord = JSON.parse(data);
     letterInd = jsonWord.letra;
-    
-      // "Empieza por/Contien la" + letra"
+
+    // "Empieza por/Contien la" + letra"
     sendAsyncMessage(jsonWord.titulo + " **" + jsonWord.letra + "**: \n" + jsonWord.definicion);
 
     // En caso de no haber palabra guardada, resetear bot
@@ -223,8 +242,6 @@ function openCurrentWord() {
 
   })
 
-  
-  //
 }
 
 // Mantener el Bot activo
