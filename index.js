@@ -69,7 +69,7 @@ client.on("message", (message) => {
     // Convertir en lista las respuestas separadas por / y revisar cada una
     let resultList = new Array();
     resultList = jsonWord.respuesta.split("/");
-    //console.log("resultList", resultList);
+    //console.log("resultList", resultList);    
 
     if (message.content === ".help") {
       sendAsyncMessage("***Pasapalabra***" + "\n" +
@@ -106,21 +106,24 @@ client.on("message", (message) => {
       }
     }
   } catch (err) {
-    message.channel.send("An error ocurred");
-    console.log(ANSI_RED + 'Exception :' + err + ANSI_RED);
+    message.channel.send("An error ocurred(1)");
+    //console.log(ANSI_RED + 'Exception(1) :' + err + ANSI_RED);
+    customLog(ANSI_RED + 'Exception(1) :' + err + ANSI_RED);
   }
 }
 );
 
 function initBot() {
-  console.log(`INICIADO COMO BOT: ${client.user.tag}`);
+  customLog(`INICIADO COMO BOT: ${client.user.tag}`);
+  //console.log(`INICIADO COMO BOT: ${client.user.tag}`);
 
   //Iniciar el juego con la ultima palabra mostrada guardada en el fichero "palabraActual.json"
   openCurrentWord();
 }
 
 function resetBot() {
-  console.log("resetBot()")
+  //console.log("resetBot()")
+  customLog("resetBot()");
 
   //Iniciar el juego con la letra "A", para ello simulo que vamos por la última letra
   letterInd = "Z"
@@ -128,7 +131,8 @@ function resetBot() {
 }
 
 function nextWord() {
-  console.log("nextWord()")
+  //console.log("nextWord()")
+  customLog("nextWord()");
   let jsonList;
 
   // Reset counter
@@ -164,7 +168,8 @@ async function sendAsyncMessage(msg) {
 }
 
 function getHint(word, idxPista) {
-  console.log("getHint()", word, idxPista);
+  //console.log("getHint()", word, idxPista);
+  customLog("getHint()", word, idxPista);
 
   // idx en el indice de pistas pedidas
   if (idxPista === 1) {
@@ -207,7 +212,8 @@ function saveCurrentWord(str) {
 
   var fsLibrary = require('fs')
 
-  console.log("saveCurrentWord()", str);
+  //console.log("saveCurrentWord()", str);
+  customLog("saveCurrentWord()", str);
 
   // Guardo la ultima palabra
   let data = JSON.stringify(str);
@@ -216,12 +222,18 @@ function saveCurrentWord(str) {
   fsLibrary.writeFile('./palabraActual.json', data, (error) => {
 
     // In case of a error throw err exception.
-    if (error) throw err;
+    if (error) {
+      message.channel.send("An error ocurred(2)");
+      //console.log(ANSI_RED + 'Exception(2) :' + err + ANSI_RED);
+      customLog(ANSI_RED + 'Exception(2) :' + err + ANSI_RED);
+      throw err;
+    }
   })
 }
 
 function openCurrentWord() {
-  console.log("openCurrentWord()")
+  //console.log("openCurrentWord()")
+  customLog("openCurrentWord()")
 
   // Include fs module
   var fs = require('fs');
@@ -236,13 +248,34 @@ function openCurrentWord() {
 
     // En caso de no haber palabra guardada, resetear bot
     if (err) {
-      console.log("openCurrentWord(), err", err)
+      //console.log("openCurrentWord(), err", err)
+      customLog("openCurrentWord(), err", err)
       resetBot();
     }
 
   })
 
 }
+
+// Fuente: https://stackoverflow.com/questions/3459476/how-to-append-to-a-file-in-node/43370201#43370201
+function customLog(obj1, obj2, obj3) {
+
+  var fsLibrary = require('fs')
+
+  console.log('customLog', obj1, obj2, obj3);
+
+  // Guardo parametro entrada
+  let data1 = JSON.stringify(obj1);
+  let data2 = JSON.stringify(obj2);
+  let data3 = JSON.stringify(obj3);
+
+  // Guardar logs en fichero ./log_traza.txt
+  // // use {flags: 'a'} to append and {flags: 'w'} to erase and write a new file
+  let stream = fsLibrary.createWriteStream("./log_traza.txt", {flags: 'a'});
+  stream.write(new Date().toISOString() + ':' + data1 + " " + data2 + " " +  data3 + '\n');
+  stream.end();
+}
+
 
 // Mantener el Bot activo
 keepAlive();
