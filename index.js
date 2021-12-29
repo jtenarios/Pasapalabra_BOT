@@ -69,7 +69,11 @@ client.on("message", (message) => {
     // Convertir en lista las respuestas separadas por / y revisar cada una
     let resultList = new Array();
     resultList = jsonWord.respuesta.split("/");
-    //console.log("resultList", resultList);    
+    //console.log("resultList", resultList);  
+
+    if (message.author.username != 'Bot Pasapalabra') {
+      customLog('<' + message.author.username + '> : ' + message.content);
+    }
 
     if (message.content === ".help") {
       sendAsyncMessage("***Pasapalabra***" + "\n" +
@@ -102,6 +106,7 @@ client.on("message", (message) => {
 
         // Reaccionar al último mensaje del chat con un thumbs up (👍)
         message.react("👍");
+        customLog("👍");
         nextWord();
       }
     }
@@ -176,7 +181,7 @@ function getHint(word, idxPista) {
     // Reemplaza cualquier caracter excepto espacios (\S	non-whitespace)
     return "`" + word.toLowerCase().replace(/\S/g, "*") + "`";
   } else if (idxPista === 2) {
-    return "`" + word.toLowerCase().replace(/[aeiouáéíóúäëïöü]/g, "*") + "`";
+    return "`" + word.toLowerCase().replace(/[aeiouáéíóúäëïöüàèìòùâêîôû]/g, "*") + "`";
 
   } else if (idxPista > 2) {
     return "`No hay más pistas`";
@@ -260,20 +265,26 @@ function openCurrentWord() {
 // Fuente: https://stackoverflow.com/questions/3459476/how-to-append-to-a-file-in-node/43370201#43370201
 function customLog(obj1, obj2, obj3) {
 
-  var fsLibrary = require('fs')
+  try {
 
-  console.log('customLog', obj1, obj2, obj3);
+    var fsLibrary = require('fs')
 
-  // Guardo parametro entrada
-  let data1 = JSON.stringify(obj1);
-  let data2 = JSON.stringify(obj2);
-  let data3 = JSON.stringify(obj3);
+    console.log('customLog', obj1, obj2, obj3);
 
-  // Guardar logs en fichero ./log_traza.txt
-  // // use {flags: 'a'} to append and {flags: 'w'} to erase and write a new file
-  let stream = fsLibrary.createWriteStream("./log_traza.txt", {flags: 'a'});
-  stream.write(new Date().toISOString() + ':' + data1 + " " + data2 + " " +  data3 + '\n');
-  stream.end();
+    // Guardo parametro entrada
+    let data1 = JSON.stringify(obj1);
+    let data2 = JSON.stringify(obj2);
+    let data3 = JSON.stringify(obj3);
+
+    // Guardar logs en fichero ./log_traza.txt
+    // // use {flags: 'a'} to append and {flags: 'w'} to erase and write a new file
+    let stream = fsLibrary.createWriteStream("./log_traza.txt", { flags: 'a' });
+    stream.write(new Date().toISOString() + ':' + data1 + " " + data2 + " " + data3 + '\n');
+    stream.end();
+  } catch (err) {
+    message.channel.send("An error ocurred(4)");
+    customLog(ANSI_RED + 'Exception(4) :' + err + ANSI_RED);
+  }
 }
 
 

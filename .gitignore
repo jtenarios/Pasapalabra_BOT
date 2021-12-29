@@ -1,0 +1,5 @@
+# Ignore log file
+log_traza.txt
+
+# Ignore file palabraActual.json
+palabraActual.json
