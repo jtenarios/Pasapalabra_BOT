@@ -205,7 +205,7 @@ function nextLetterInAlphabet(letter) {
     nextLetter = String.fromCharCode(letter.charCodeAt(0) + 1);
 
     // Letras no contempladas en el rosco, saltar a la siguiente letra
-    if (nextLetter == "Ñ" || nextLetter == "K" || nextLetter == "T" || nextLetter == "W" || nextLetter == "Y") {
+    if (nextLetter == "K" || nextLetter == "T" || nextLetter == "W" || nextLetter == "Y") {
       nextLetter = String.fromCharCode(nextLetter.charCodeAt(0) + 1);
     }
   }
