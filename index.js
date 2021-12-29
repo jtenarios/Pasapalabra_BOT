@@ -71,7 +71,7 @@ client.on("message", (message) => {
     resultList = jsonWord.respuesta.split("/");
     //console.log("resultList", resultList);  
 
-    if (message.author.username != 'Bot Pasapalabra') {
+    if (message.author.username != 'PasapalabraBot') {
       customLog('<' + message.author.username + '> : ' + message.content);
     }
 
