@@ -175,13 +175,16 @@ async function sendAsyncMessage(msg) {
 function getHint(word, idxPista) {
   //console.log("getHint()", word, idxPista);
   customLog("getHint()", word, idxPista);
+  let text = word.toLowerCase();
 
   // idx en el indice de pistas pedidas
   if (idxPista === 1) {
     // Reemplaza cualquier caracter excepto espacios (\S	non-whitespace)
-    return "`" + word.toLowerCase().replace(/\S/g, "*") + "`";
+    // 1ar letra + caracteres convertidos a * + ultima letra (ej: armario --> a+*****+o)
+    return "`" + text.substring(0, 1) + text.substring(1, text.length - 1).replace(/\S/g, "*") + text.substring(text.length - 1, text.length) + "`";
   } else if (idxPista === 2) {
-    return "`" + word.toLowerCase().replace(/[aeiouáéíóúäëïöüàèìòùâêîôû]/g, "*") + "`";
+    //  (ej: armario --> a+rm*r**)
+    return "`" + text.substring(0, 1) + text.substring(1, text.length).replace(/[aeiouáéíóúäëïöüàèìòùâêîôû]/g, "*") + "`";
 
   } else if (idxPista > 2) {
     return "`No hay más pistas`";
