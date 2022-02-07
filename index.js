@@ -64,56 +64,58 @@ client.on("ready", async function() {
 
 client.on("message", (message) => {
 
-  try {
+  // Analizar solo mensajes del chat Pasapalabra
+  if (message.channel.id === mySecretChatId) {
+    try {
 
-    // Convertir en lista las respuestas separadas por / y revisar cada una
-    let resultList = new Array();
-    resultList = jsonWord.respuesta.split("/");
-    //console.log("resultList", resultList);  
+      // Convertir en lista las respuestas separadas por / y revisar cada una
+      let resultList = new Array();
+      resultList = jsonWord.respuesta.split("/");
 
-    if (message.author.username != 'PasapalabraBot') {
-      customLog('<' + message.author.username + '> : ' + message.content);
-    }
+      if (message.author.username != 'PasapalabraBot') {
+        customLog('<' + message.author.username + '> : ' + message.content);
+      }
 
-    if (message.content === ".help") {
-      sendAsyncMessage("***Pasapalabra***" + "\n" +
-        "Lista de comandos:" + "\n" +
-        "`.pista` para pedir una ayudita" + "\n" +
-        "`.next` para pasar a la siguiente palabra" + "\n" +
-        "`.resolve` para ver la palabra oculta" + "\n" +
-        "`.reset` para reiniciar el juego" + "\n" +
-        "`.status` para ver estado del bot (activo/inactivo)"
-      );
-    } else if (message.content === ".pista") {
-      indPista = indPista + 1;
+      if (message.content === ".help") {
+        sendAsyncMessage("***Pasapalabra***" + "\n" +
+          "Lista de comandos:" + "\n" +
+          "`.pista` para pedir una ayudita" + "\n" +
+          "`.next` para pasar a la siguiente palabra" + "\n" +
+          "`.resolve` para ver la palabra oculta" + "\n" +
+          "`.reset` para reiniciar el juego" + "\n" +
+          "`.status` para ver estado del bot (activo/inactivo)"
+        );
+      } else if (message.content === ".pista") {
+        indPista = indPista + 1;
+
+        for (let i = 0; i < resultList.length; i++) {
+          message.channel.send(getHint(resultList[i], indPista));
+        }
+      } else if (message.content === ".next") {
+        nextWord();
+      } else if (message.content === ".resolve") {
+        // Mostrar texto oculto
+        message.channel.send("||" + jsonWord.respuesta + "||");
+      } else if (message.content === ".reset") {
+        resetBot();
+      } else if (message.content === ".status") {
+        message.channel.send("Running...");
+      }
 
       for (let i = 0; i < resultList.length; i++) {
-        message.channel.send(getHint(resultList[i], indPista));
-      }
-    } else if (message.content === ".next") {
-      nextWord();
-    } else if (message.content === ".resolve") {
-      // Mostrar texto oculto
-      message.channel.send("||" + jsonWord.respuesta + "||");
-    } else if (message.content === ".reset") {
-      resetBot();
-    } else if (message.content === ".status") {
-      message.channel.send("Running...");
-    }
+        if (message.content.toLowerCase() === resultList[i].toLowerCase()) {
 
-    for (let i = 0; i < resultList.length; i++) {
-      if (message.content.toLowerCase() === resultList[i].toLowerCase()) {
-
-        // Reaccionar al último mensaje del chat con un thumbs up (👍)
-        message.react("👍");
-        customLog("👍");
-        nextWord();
+          // Reaccionar al último mensaje del chat con un thumbs up (👍)
+          message.react("👍");
+          customLog("👍");
+          nextWord();
+        }
       }
+    } catch (err) {
+      message.channel.send("An error ocurred(1)");
+      //console.log(ANSI_RED + 'Exception(1) :' + err + ANSI_RED);
+      customLog(ANSI_RED + 'Exception(1) :' + err + ANSI_RED);
     }
-  } catch (err) {
-    message.channel.send("An error ocurred(1)");
-    //console.log(ANSI_RED + 'Exception(1) :' + err + ANSI_RED);
-    customLog(ANSI_RED + 'Exception(1) :' + err + ANSI_RED);
   }
 }
 );
@@ -272,7 +274,7 @@ function customLog(obj1, obj2, obj3) {
 
     var fsLibrary = require('fs')
 
-    console.log('customLog', obj1, obj2, obj3);
+    //console.log('customLog', obj1, obj2, obj3);
 
     // Guardo parametro entrada
     let data1 = JSON.stringify(obj1);
